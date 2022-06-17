@@ -3,10 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const CONFIG_KEYS = {
-	host: "HOST",
-	port: "PORT",
 	rabbitmqUrl: "RABBITMQ_URL",
-	stage: "NODE_ENV",
 	token: "TELEGRAM_TOKEN",
 } as const;
 

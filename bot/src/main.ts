@@ -1,6 +1,4 @@
 import { BOT } from "./bot";
-import { startServer } from "./server";
-import { getEnv } from "./config";
 import { connectBroker, QUEUES, rabbitMQ } from "./broker";
 
 async function main(): Promise<void> {
@@ -12,15 +10,6 @@ async function main(): Promise<void> {
 	});
 
 	await connectBroker();
-
-	if (getEnv("stage") === "production") {
-		await startServer();
-		await BOT.api.setWebhook(`${getEnv("host")}/rabbitmq_bot`);
-		console.info("Bot was started in production mode");
-		return;
-	}
-
-	console.info("[App] Bot was started in development mode");
 	await BOT.start();
 }
 
