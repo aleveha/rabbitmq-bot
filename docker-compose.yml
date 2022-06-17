@@ -16,6 +16,22 @@ services:
         restart: always
         command: node main.js
 
+    api:
+        container_name: api
+        build:
+            context: ./api
+            target: prod
+        depends_on:
+            - rabbitmq
+        links:
+            - rabbitmq
+        ports:
+            - "8002:8002"
+        env_file:
+            - ./api/.env
+        restart: always
+        command: node main.js
+
     rabbitmq:
         image: rabbitmq:3.9.13-management-alpine
         container_name: rabbitmq
