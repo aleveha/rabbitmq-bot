@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+    bot:
+        container_name: bot
+        build:
+            context: ./bot
+            target: prod
+        depends_on:
+            - rabbitmq
+        links:
+            - rabbitmq
+        ports:
+            - "8001:8001"
+        env_file:
+            - ./bot/.env
+        restart: always
+        command: node main.js
+
+    rabbitmq:
+        image: rabbitmq:3.9.13-management-alpine
+        container_name: rabbitmq
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        restart: on-failure
+        volumes:
+            - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+            - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
