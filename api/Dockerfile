@@ -2,7 +2,7 @@ FROM node:16-alpine as deps
 WORKDIR /tmp
 COPY package.json yarn.lock ./
 RUN yarn install
-COPY . .
+COPY ./api .
 RUN yarn build
 RUN yarn install --production --ignore-scripts --prefer-offline
 RUN mv out /home/node && mv node_modules /home/node

@@ -3,7 +3,7 @@ services:
     bot:
         container_name: bot
         build:
-            context: ./bot
+            dockerfile: ./bot/Dockerfile
             target: prod
         depends_on:
             - rabbitmq
@@ -12,14 +12,14 @@ services:
         ports:
             - "8001:8001"
         env_file:
-            - ./bot/.env
-        restart: always
+            - .env
+        restart: on-failure
         command: node main.js
 
     api:
         container_name: api
         build:
-            context: ./api
+            dockerfile: ./api/Dockerfile
             target: prod
         depends_on:
             - rabbitmq
@@ -28,8 +28,8 @@ services:
         ports:
             - "8002:8002"
         env_file:
-            - ./api/.env
-        restart: always
+            - .env
+        restart: on-failure
         command: node main.js
 
     rabbitmq:
