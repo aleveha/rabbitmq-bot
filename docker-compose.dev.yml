@@ -3,34 +3,34 @@ services:
     bot:
         container_name: bot
         build:
-            dockerfile: ./bot/Dockerfile
-            target: prod
+            context: ./bot
+            dockerfile: ./Dockerfile.dev
         depends_on:
             - rabbitmq
         links:
             - rabbitmq
-        ports:
-            - "8001:8001"
         env_file:
-            - api/.env
-        restart: on-failure
-        command: node main.js
+            - ./bot/.env
+        command: yarn dev
+        restart: always
+        volumes:
+            - ./bot:/app
 
     api:
         container_name: api
         build:
-            dockerfile: ./api/Dockerfile
-            target: prod
+            context: ./api
+            dockerfile: ./Dockerfile.dev
         depends_on:
             - rabbitmq
         links:
             - rabbitmq
-        ports:
-            - "8002:8002"
         env_file:
-            - api/.env
-        restart: on-failure
-        command: node main.js
+            - ./api/.env
+        command: yarn dev
+        restart: always
+        volumes:
+            - ./api:/app
 
     rabbitmq:
         image: rabbitmq:3.9.13-management-alpine
@@ -38,7 +38,7 @@ services:
         ports:
             - "5672:5672"
             - "15672:15672"
-        restart: on-failure
+        restart: always
         volumes:
             - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
             - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq

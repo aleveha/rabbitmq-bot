@@ -6,7 +6,9 @@ type Message = Filter<Context, "message:text">["message"];
 
 async function handleMessage(message: Message): Promise<void> {
 	await BOT.api.sendMessage(message.chat.id, "Got your message from RabbitMQ!");
-	await BOT.api.sendMessage(message.chat.id, message.text);
+	for (let i of Array(10).keys()) {
+		await BOT.api.sendMessage(message.chat.id, String(i));
+	}
 }
 
 async function main(): Promise<void> {
